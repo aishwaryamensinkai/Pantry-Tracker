@@ -2,16 +2,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Stack,
-  Typography,
-  Button,
-  IconButton,
-  AppBar,
-  Toolbar,
-} from "@mui/material";
-import { firestore } from "../firebase";
+import { Box, Stack, Typography, Button, AppBar, Toolbar } from "@mui/material";
+import { firestore } from "../firebase/firebase";
 import {
   collection,
   doc,
@@ -22,7 +14,6 @@ import {
 } from "firebase/firestore";
 import SearchBar from "../components/SearchBar";
 import AddItemModal from "../components/AddItemModal";
-import DeleteIcon from "@mui/icons-material/Delete";
 import "../styles/globals.css";
 import InventoryList from "../components/InventoryList";
 
