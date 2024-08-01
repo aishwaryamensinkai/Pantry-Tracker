@@ -1,23 +1,27 @@
-import { TextField, InputAdornment, IconButton } from "@mui/material";
+import { Box, TextField, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-export default function SearchBar({ search, setSearch, handleSearch }) {
+export default function SearchBar({
+  searchQuery,
+  setSearchQuery,
+  handleSearch,
+}) {
   return (
-    <TextField
-      label="Search"
-      variant="outlined"
-      fullWidth
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            <IconButton onClick={handleSearch}>
-              <SearchIcon />
-            </IconButton>
-          </InputAdornment>
-        ),
-      }}
-    />
+    <Box display="flex" alignItems="center" mb={3}>
+      <TextField
+        variant="outlined"
+        fullWidth
+        placeholder="Search by name or category..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+      <IconButton
+        color="primary"
+        onClick={() => handleSearch(searchQuery)}
+        sx={{ marginLeft: 1 }}
+      >
+        <SearchIcon />
+      </IconButton>
+    </Box>
   );
 }

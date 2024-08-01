@@ -2,25 +2,26 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Box, Stack, Typography, Button, AppBar, Toolbar } from "@mui/material";
+import { Container, Box, Button, Typography } from "@mui/material";
+import AddItemModal from "../components/AddItemModal";
+import InventoryList from "../components/InventoryList";
+import SearchBar from "../components/SearchBar";
+import { useSnackbar } from "notistack";
 import { firestore } from "../firebase/firebase";
 import {
   collection,
-  doc,
   getDocs,
-  query,
-  setDoc,
+  addDoc,
   deleteDoc,
+  doc,
 } from "firebase/firestore";
-import SearchBar from "../components/SearchBar";
-import AddItemModal from "../components/AddItemModal";
-import "../styles/globals.css";
-import InventoryList from "../components/InventoryList";
 
 export default function Home() {
   const [inventory, setInventory] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [item, setItem] = useState({
+  const [searchQuery, setSearchQuery] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [currentItem, setCurrentItem] = useState({
     name: "",
     category: "",
     quantity: "",
@@ -29,66 +30,108 @@ export default function Home() {
     location: "",
     notes: "",
   });
-  const [search, setSearch] = useState("");
-
-  const updateInventory = async () => {
-    const snapshot = query(collection(firestore, "inventory"));
-    const querySnapshot = await getDocs(snapshot);
-    const items = querySnapshot.docs.map((doc) => doc.data());
-    setInventory(items);
-  };
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    updateInventory();
-  }, []);
+    const fetchInventory = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(firestore, "inventory"));
+        const items = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setInventory(items);
+      } catch (error) {
+        enqueueSnackbar("Error fetching inventory.", { variant: "error" });
+      }
+    };
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+    fetchInventory();
+  }, [enqueueSnackbar]);
 
-  const addItem = async (item) => {
-    await setDoc(doc(firestore, "inventory", item.name), item);
-    updateInventory();
+  const handleAddItem = async (item) => {
+    try {
+      await addDoc(collection(firestore, "inventory"), item);
+      setInventory((prev) => [...prev, item]);
+      enqueueSnackbar("Item added successfully!", { variant: "success" });
+    } catch (error) {
+      enqueueSnackbar("Error adding item.", { variant: "error" });
+    }
   };
 
-  const removeItem = async (name) => {
-    await deleteDoc(doc(firestore, "inventory", name));
-    updateInventory();
+  const handleRemoveItem = async (name) => {
+    try {
+      const itemToRemove = inventory.find((item) => item.name === name);
+      if (itemToRemove) {
+        await deleteDoc(doc(firestore, "inventory", itemToRemove.id));
+        setInventory((prev) =>
+          prev.filter((item) => item.id !== itemToRemove.id)
+        ); // Use item.id for accuracy
+        enqueueSnackbar("Item removed successfully!", { variant: "success" });
+      }
+    } catch (error) {
+      enqueueSnackbar("Error removing item.", { variant: "error" });
+    }
   };
 
-  const handleSearch = () => {
-    // Add your search logic here
-    console.log("Searching for: ", search);
+  const handleSearch = (query) => {
+    setSearchQuery(query);
   };
+
+  const filteredInventory = inventory.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <Box className="home-container">
-      <AppBar position="static" className="app-bar">
-        <Toolbar>
-          <img src="../assets/images/logo.png" alt="Logo" className="logo" />
-          <Typography variant="h6" className="app-title">
-            Pantry Management
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Stack spacing={2} className="controls-section">
-        <SearchBar
-          search={search}
-          setSearch={setSearch}
-          handleSearch={handleSearch}
-        />
-        <Button variant="contained" color="primary" onClick={handleOpen}>
-          Add Item
+    <Container maxWidth="md">
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        mb={3}
+      >
+        <Box display="flex" alignItems="center">
+          <img
+            src="../assets/images/logo.png"
+            alt="Logo"
+            style={{ width: "35%", marginRight: "10px" }}
+          />
+        </Box>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            setEditMode(false);
+            setCurrentItem({
+              name: "",
+              category: "",
+              quantity: "",
+              unit: "",
+              expirationDate: "",
+              location: "",
+              notes: "",
+            });
+            setOpenModal(true);
+          }}
+        >
+          Add New Item
         </Button>
-        <AddItemModal
-          open={open}
-          handleClose={handleClose}
-          item={item}
-          setItem={setItem}
-          addItem={addItem}
-          editMode={false}
-        />
-      </Stack>
-      <InventoryList inventory={inventory} removeItem={removeItem} />
-    </Box>
+      </Box>
+      <SearchBar searchQuery={searchQuery} setSearchQuery={handleSearch} />
+      <InventoryList
+        inventory={filteredInventory}
+        removeItem={handleRemoveItem}
+      />
+      <AddItemModal
+        open={openModal}
+        handleClose={() => setOpenModal(false)}
+        item={currentItem}
+        setItem={setCurrentItem}
+        addItem={handleAddItem}
+        editMode={editMode}
+      />
+    </Container>
   );
 }

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Typography,
@@ -12,14 +13,16 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: { xs: "90%", sm: 500 }, // Increased width for better form layout
-  bgcolor: "#f0f0f0", // Light background color
+  width: { xs: "90%", sm: 500 },
+  bgcolor: "#f0f0f0",
   borderRadius: "8px",
   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
   p: 4,
@@ -57,7 +60,6 @@ export default function AddItemModal({
   item,
   setItem,
   addItem,
-  editMode,
 }) {
   const { enqueueSnackbar } = useSnackbar();
 
@@ -77,6 +79,13 @@ export default function AddItemModal({
     }));
   };
 
+  const handleDateChange = (date) => {
+    setItem((prevItem) => ({
+      ...prevItem,
+      expirationDate: date ? date.toISOString() : "", // Store as ISO string or use timestamp as needed
+    }));
+  };
+
   const validateForm = () => {
     const requiredFields = [
       "name",
@@ -85,7 +94,6 @@ export default function AddItemModal({
       "unit",
       "expirationDate",
       "location",
-      "notes",
     ];
     for (const field of requiredFields) {
       if (!item[field]) {
@@ -103,13 +111,26 @@ export default function AddItemModal({
 
   const handleSubmit = () => {
     if (validateForm()) {
-      addItem(item);
+      const updatedItem = {
+        ...item,
+        notes: item.notes.trim() === "" ? "N/A" : item.notes, // Set notes to "N/A" if empty
+        lastUpdated: new Date().toISOString(), // Update lastUpdated with the current date and time
+      };
+      addItem(updatedItem);
       handleClose();
-      enqueueSnackbar(`Item ${editMode ? "updated" : "added"} successfully!`, {
+      enqueueSnackbar(`Item added successfully!`, {
         variant: "success",
       });
     }
   };
+
+  // Convert ISO string or timestamp to Date object
+  const expirationDate = item.expirationDate
+    ? new Date(item.expirationDate)
+    : null;
+
+  // Convert ISO string or timestamp to Date object for lastUpdated
+  const lastUpdatedDate = item.lastUpdated ? new Date(item.lastUpdated) : null;
 
   return (
     <Modal
@@ -128,7 +149,7 @@ export default function AddItemModal({
           fontWeight="bold"
           mb={2}
         >
-          {editMode ? "Edit Item" : "Add Item"}
+          Add Item
         </Typography>
         <Stack spacing={2}>
           <TextField
@@ -178,6 +199,7 @@ export default function AddItemModal({
               onChange={handleSelectChange}
               label="Unit of Measurement"
             >
+              {/* Add all unit options */}
               <MenuItem value="lbs">lbs (pounds)</MenuItem>
               <MenuItem value="oz">oz (ounces)</MenuItem>
               <MenuItem value="kg">kg (kilograms)</MenuItem>
@@ -202,14 +224,12 @@ export default function AddItemModal({
               <MenuItem value="bars">bars (bars)</MenuItem>
             </Select>
           </FormControl>
-          <TextField
-            name="expirationDate"
-            label="Expiration Date"
-            variant="outlined"
-            fullWidth
-            value={item.expirationDate}
-            onChange={handleInputChange}
-            placeholder="Enter expiration date"
+          <DatePicker
+            selected={expirationDate}
+            onChange={handleDateChange}
+            dateFormat="yyyy/MM/dd"
+            placeholderText="Select expiration date"
+            customInput={<TextField fullWidth />}
             required
           />
           <FormControl fullWidth required>
@@ -236,15 +256,19 @@ export default function AddItemModal({
             value={item.notes}
             onChange={handleInputChange}
             placeholder="Enter additional notes"
-            required
           />
+          {lastUpdatedDate && (
+            <Typography variant="body2" color="textSecondary">
+              Last Updated: {lastUpdatedDate.toLocaleString()}
+            </Typography>
+          )}
           <Button
             variant="contained"
             color="primary"
             onClick={handleSubmit}
             sx={{ borderRadius: "8px", py: 1.5 }}
           >
-            {editMode ? "Update" : "Add"}
+            Add
           </Button>
         </Stack>
       </Box>
