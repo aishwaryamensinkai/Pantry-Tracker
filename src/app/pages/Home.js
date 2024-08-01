@@ -10,6 +10,13 @@ import {
   Typography,
   IconButton,
   Badge,
+  Stack,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+  Grid,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AddItemModal from "../components/AddItemModal";
@@ -48,6 +55,39 @@ export default function Home() {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [expirationFilter, setExpirationFilter] = useState("");
+  const [quantityFilter, setQuantityFilter] = useState("");
+  const categories = [
+    "Grains",
+    "Canned Goods",
+    "Dairy",
+    "Produce",
+    "Meat",
+    "Frozen Foods",
+    "Beverages",
+    "Snacks",
+    "Condiments",
+    "Other",
+  ];
+  const filterItems = (items) => {
+    return items.filter((item) => {
+      const matchesCategory =
+        !categoryFilter || item.category === categoryFilter;
+      const matchesExpiration =
+        !expirationFilter ||
+        new Date(item.expirationDate) <= new Date(expirationFilter);
+      const matchesQuantity =
+        !quantityFilter || item.quantity >= Number(quantityFilter);
+
+      return matchesCategory && matchesExpiration && matchesQuantity;
+    });
+  };
+
+  useEffect(() => {
+    const filtered = filterItems(items);
+    setFilteredItems(filtered);
+  }, [items, categoryFilter, expirationFilter, quantityFilter]);
 
   const fetchItems = async () => {
     try {
@@ -210,6 +250,53 @@ export default function Home() {
           }}
           handleSearch={handleSearch}
         />
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            Filters
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={4}>
+              {/* Category Filter */}
+              <FormControl fullWidth>
+                <InputLabel id="category-filter-label">Category</InputLabel>
+                <Select
+                  labelId="category-filter-label"
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                  label="Category"
+                >
+                  <MenuItem value="">All Categories</MenuItem>
+                  {categories.map((category) => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              {/* Expiration Date Filter */}
+              <TextField
+                label="Filter by Expiration Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                onChange={(e) => setExpirationFilter(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              {/* Quantity Filter */}
+              <TextField
+                label="Filter by Minimum Quantity"
+                type="number"
+                InputProps={{ inputProps: { min: 0 } }}
+                onChange={(e) => setQuantityFilter(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+        </Box>
+
         <InventoryList
           inventory={filteredItems}
           removeItem={handleDeleteClick}
