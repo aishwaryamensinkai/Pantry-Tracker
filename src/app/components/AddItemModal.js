@@ -60,6 +60,8 @@ export default function AddItemModal({
   item,
   setItem,
   addItem,
+  updateItem,
+  editMode,
 }) {
   const { enqueueSnackbar } = useSnackbar();
 
@@ -82,7 +84,7 @@ export default function AddItemModal({
   const handleDateChange = (date) => {
     setItem((prevItem) => ({
       ...prevItem,
-      expirationDate: date ? date.toISOString() : "", // Store as ISO string or use timestamp as needed
+      expirationDate: date ? date.toISOString() : "",
     }));
   };
 
@@ -113,23 +115,25 @@ export default function AddItemModal({
     if (validateForm()) {
       const updatedItem = {
         ...item,
-        notes: item.notes.trim() === "" ? "N/A" : item.notes, // Set notes to "N/A" if empty
-        lastUpdated: new Date().toISOString(), // Update lastUpdated with the current date and time
+        notes: item.notes.trim() === "" ? "N/A" : item.notes,
+        lastUpdated: new Date().toISOString(),
       };
-      addItem(updatedItem);
+      if (editMode) {
+        updateItem(updatedItem);
+      } else {
+        addItem(updatedItem);
+      }
       handleClose();
-      enqueueSnackbar(`Item added successfully!`, {
+      enqueueSnackbar(`Item ${editMode ? "updated" : "added"} successfully!`, {
         variant: "success",
       });
     }
   };
 
-  // Convert ISO string or timestamp to Date object
   const expirationDate = item.expirationDate
     ? new Date(item.expirationDate)
     : null;
 
-  // Convert ISO string or timestamp to Date object for lastUpdated
   const lastUpdatedDate = item.lastUpdated ? new Date(item.lastUpdated) : null;
 
   return (
@@ -149,7 +153,7 @@ export default function AddItemModal({
           fontWeight="bold"
           mb={2}
         >
-          Add Item
+          {editMode ? "Edit Item" : "Add Item"}
         </Typography>
         <Stack spacing={2}>
           <TextField
@@ -199,7 +203,6 @@ export default function AddItemModal({
               onChange={handleSelectChange}
               label="Unit of Measurement"
             >
-              {/* Add all unit options */}
               <MenuItem value="lbs">lbs (pounds)</MenuItem>
               <MenuItem value="oz">oz (ounces)</MenuItem>
               <MenuItem value="kg">kg (kilograms)</MenuItem>
@@ -268,7 +271,7 @@ export default function AddItemModal({
             onClick={handleSubmit}
             sx={{ borderRadius: "8px", py: 1.5 }}
           >
-            Add
+            {editMode ? "Update" : "Add"}
           </Button>
         </Stack>
       </Box>

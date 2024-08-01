@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
@@ -14,12 +15,12 @@ import {
   addDoc,
   deleteDoc,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 
 export default function Home() {
-  const [inventory, setInventory] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [openModal, setOpenModal] = useState(false);
+  const [items, setItems] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentItem, setCurrentItem] = useState({
     name: "",
@@ -29,109 +30,121 @@ export default function Home() {
     expirationDate: "",
     location: "",
     notes: "",
+    lastUpdated: "",
   });
   const { enqueueSnackbar } = useSnackbar();
 
+  const fetchItems = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(firestore, "inventory"));
+      const itemsData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setItems(itemsData);
+    } catch (error) {
+      enqueueSnackbar("Failed to fetch items.", { variant: "error" });
+    }
+  };
+
   useEffect(() => {
-    const fetchInventory = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(firestore, "inventory"));
-        const items = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setInventory(items);
-      } catch (error) {
-        enqueueSnackbar("Error fetching inventory.", { variant: "error" });
-      }
-    };
+    fetchItems();
+  }, []);
 
-    fetchInventory();
-  }, [enqueueSnackbar]);
-
-  const handleAddItem = async (item) => {
+  const addItem = async (item) => {
     try {
       await addDoc(collection(firestore, "inventory"), item);
-      setInventory((prev) => [...prev, item]);
+      fetchItems();
       enqueueSnackbar("Item added successfully!", { variant: "success" });
     } catch (error) {
-      enqueueSnackbar("Error adding item.", { variant: "error" });
+      enqueueSnackbar("Failed to add item.", { variant: "error" });
     }
   };
 
-  const handleRemoveItem = async (name) => {
+  const updateItem = async (item) => {
     try {
-      const itemToRemove = inventory.find((item) => item.name === name);
-      if (itemToRemove) {
-        await deleteDoc(doc(firestore, "inventory", itemToRemove.id));
-        setInventory((prev) =>
-          prev.filter((item) => item.id !== itemToRemove.id)
-        ); // Use item.id for accuracy
-        enqueueSnackbar("Item removed successfully!", { variant: "success" });
-      }
+      const itemRef = doc(firestore, "inventory", item.id);
+      await updateDoc(itemRef, item);
+      fetchItems();
+      enqueueSnackbar("Item updated successfully!", { variant: "success" });
     } catch (error) {
-      enqueueSnackbar("Error removing item.", { variant: "error" });
+      enqueueSnackbar("Failed to update item.", { variant: "error" });
     }
   };
 
-  const handleSearch = (query) => {
-    setSearchQuery(query);
+  const handleEditClick = (item) => {
+    setCurrentItem(item);
+    setEditMode(true);
+    setModalOpen(true);
   };
 
-  const filteredInventory = inventory.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleDeleteClick = async (id) => {
+    try {
+      await deleteDoc(doc(firestore, "inventory", id));
+      fetchItems();
+      enqueueSnackbar("Item deleted successfully!", { variant: "success" });
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      enqueueSnackbar("Failed to delete item.", { variant: "error" });
+    }
+  };
+
+  const handleAddItemClick = () => {
+    setCurrentItem({
+      name: "",
+      category: "",
+      quantity: "",
+      unit: "",
+      expirationDate: "",
+      location: "",
+      notes: "",
+      lastUpdated: "",
+    });
+    setEditMode(false);
+    setModalOpen(true);
+  };
 
   return (
-    <Container maxWidth="md">
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={3}
-      >
-        <Box display="flex" alignItems="center">
-          <img
-            src="../assets/images/logo.png"
-            alt="Logo"
-            style={{ width: "35%", marginRight: "10px" }}
-          />
-        </Box>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            setEditMode(false);
-            setCurrentItem({
-              name: "",
-              category: "",
-              quantity: "",
-              unit: "",
-              expirationDate: "",
-              location: "",
-              notes: "",
-            });
-            setOpenModal(true);
-          }}
+    <Container>
+      <Box sx={{ my: 4 }}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={3}
         >
-          Add New Item
-        </Button>
+          <Box display="flex" alignItems="center">
+            <img
+              src="../assets/images/logo.png"
+              alt="Logo"
+              style={{ width: "35%", marginRight: "10px" }}
+            />
+          </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleAddItemClick}
+            sx={{ mb: 2 }}
+          >
+            Add New Item
+          </Button>
+        </Box>
+        <SearchBar items={items} setItems={setItems} />
+        <InventoryList
+          inventory={items}
+          removeItem={handleDeleteClick}
+          editItem={handleEditClick}
+        />
+        <AddItemModal
+          open={modalOpen}
+          handleClose={() => setModalOpen(false)}
+          item={currentItem}
+          setItem={setCurrentItem}
+          addItem={addItem}
+          updateItem={updateItem}
+          editMode={editMode}
+        />
       </Box>
-      <SearchBar searchQuery={searchQuery} setSearchQuery={handleSearch} />
-      <InventoryList
-        inventory={filteredInventory}
-        removeItem={handleRemoveItem}
-      />
-      <AddItemModal
-        open={openModal}
-        handleClose={() => setOpenModal(false)}
-        item={currentItem}
-        setItem={setCurrentItem}
-        addItem={handleAddItem}
-        editMode={editMode}
-      />
     </Container>
   );
 }

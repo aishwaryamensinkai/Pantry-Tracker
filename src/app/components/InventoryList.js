@@ -13,7 +13,7 @@ const formatDateTime = (dateString) => {
   return date.toLocaleString(); // Adjust this to your preferred format if needed
 };
 
-export default function InventoryList({ inventory, removeItem }) {
+export default function InventoryList({ inventory, removeItem, editItem }) {
   return (
     <Box className="inventory-list" sx={{ padding: 2 }}>
       <Stack spacing={2}>
@@ -51,14 +51,22 @@ export default function InventoryList({ inventory, removeItem }) {
               <strong>Last Updated:</strong>{" "}
               {item.lastUpdated ? formatDateTime(item.lastUpdated) : "N/A"}
             </Typography>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => removeItem(item.name)}
-              sx={{ marginTop: 2 }}
-            >
-              Remove
-            </Button>
+            <Stack direction="row" spacing={1} sx={{ marginTop: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => editItem(item)}
+              >
+                Edit
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => removeItem(item.id)} // Use item.id instead of item.name
+              >
+                Remove
+              </Button>
+            </Stack>
           </Box>
         ))}
         {inventory.length === 0 && (
