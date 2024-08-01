@@ -77,12 +77,20 @@ export default function Home() {
         const diffDays = Math.ceil((expDate - now) / (1000 * 60 * 60 * 24));
         if (diffDays <= 7) {
           // Notify if expiring in 7 days or less
-          alerts.push(`Item ${item.name} is expiring soon.`);
+          alerts.push({
+            type: "expiring",
+            message: `Item ${item.name}.`,
+            date: expDate.toLocaleDateString(),
+          });
         }
       }
       if (item.quantity < 5) {
         // Notify if quantity is less than 5
-        alerts.push(`Item ${item.name} is running low.`);
+        alerts.push({
+          type: "low",
+          message: `Item ${item.name} is running low.`,
+          count: item.quantity,
+        });
       }
     });
     setNotifications(alerts);
@@ -253,7 +261,19 @@ export default function Home() {
             ) : (
               notifications.map((notification, index) => (
                 <Typography key={index} variant="body2" color="error" mb={1}>
-                  {notification}
+                  {notification.message}
+                  {notification.date && (
+                    <Typography variant="body2" color="text.secondary">
+                      {" "}
+                      (Expiring on {notification.date})
+                    </Typography>
+                  )}
+                  {notification.count !== undefined && (
+                    <Typography variant="body2" color="text.secondary">
+                      {" "}
+                      (Only {notification.count} left)
+                    </Typography>
+                  )}
                 </Typography>
               ))
             )}
