@@ -17,6 +17,7 @@
     "@mui/material": "^5.16.6",
     "date-fns": "^3.6.0",
     "firebase": "^10.12.4",
+    "lodash": "^4.17.21",
     "next": "14.2.5",
     "notistack": "^3.0.1",
     "react": "^18",

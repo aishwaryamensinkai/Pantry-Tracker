@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Container, Box, Button, Typography } from "@mui/material";
 import AddItemModal from "../components/AddItemModal";
 import InventoryList from "../components/InventoryList";
@@ -17,9 +17,12 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
+import debounce from "lodash/debounce";
 
 export default function Home() {
   const [items, setItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentItem, setCurrentItem] = useState({
@@ -42,6 +45,7 @@ export default function Home() {
         ...doc.data(),
       }));
       setItems(itemsData);
+      setFilteredItems(itemsData);
     } catch (error) {
       enqueueSnackbar("Failed to fetch items.", { variant: "error" });
     }
@@ -50,6 +54,23 @@ export default function Home() {
   useEffect(() => {
     fetchItems();
   }, []);
+
+  const handleSearch = useCallback(
+    debounce((query) => {
+      if (query) {
+        const lowercasedQuery = query.toLowerCase();
+        const filtered = items.filter(
+          (item) =>
+            item.name.toLowerCase().includes(lowercasedQuery) ||
+            item.category.toLowerCase().includes(lowercasedQuery)
+        );
+        setFilteredItems(filtered);
+      } else {
+        setFilteredItems(items);
+      }
+    }, 300), // Debounce time in milliseconds
+    [items]
+  );
 
   const addItem = async (item) => {
     try {
@@ -129,9 +150,16 @@ export default function Home() {
             Add New Item
           </Button>
         </Box>
-        <SearchBar items={items} setItems={setItems} />
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={(query) => {
+            setSearchQuery(query);
+            handleSearch(query);
+          }}
+          handleSearch={handleSearch}
+        />
         <InventoryList
-          inventory={items}
+          inventory={filteredItems}
           removeItem={handleDeleteClick}
           editItem={handleEditClick}
         />
