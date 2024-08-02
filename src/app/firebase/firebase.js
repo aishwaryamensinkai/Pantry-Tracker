@@ -1,6 +1,12 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,6 +20,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+const signInWithGoogle = () => signInWithPopup(auth, provider);
 
 let analytics;
 if (typeof window !== "undefined") {
@@ -24,4 +33,4 @@ if (typeof window !== "undefined") {
   });
 }
 
-export { firestore, analytics };
+export { auth, signInWithGoogle, signOut, firestore, analytics, provider };

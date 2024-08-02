@@ -38,7 +38,6 @@ const categories = [
   "Beverages",
   "Snacks",
   "Condiments",
-  "Other",
 ];
 
 const locations = [
@@ -52,6 +51,31 @@ const locations = [
   "Pantry Door",
   "Cabinet",
   "Drawer",
+];
+
+const unitsOfMeasurement = [
+  "lbs (pounds)",
+  "oz (ounces)",
+  "kg (kilograms)",
+  "g (grams)",
+  "gal (gallons)",
+  "qt (quarts)",
+  "pt (pints)",
+  "c (cups)",
+  "fl oz (fluid ounces)",
+  "ml (milliliters)",
+  "l (liters)",
+  "pcs (pieces)",
+  "cans (cans)",
+  "bottles (bottles)",
+  "jars (jars)",
+  "boxes (boxes)",
+  "packs (packs)",
+  "tbsp (tablespoons)",
+  "tsp (teaspoons)",
+  "bags (bags)",
+  "slices (slices)",
+  "bars (bars)",
 ];
 
 export default function AddItemModal({
@@ -203,28 +227,11 @@ export default function AddItemModal({
               onChange={handleSelectChange}
               label="Unit of Measurement"
             >
-              <MenuItem value="lbs">lbs (pounds)</MenuItem>
-              <MenuItem value="oz">oz (ounces)</MenuItem>
-              <MenuItem value="kg">kg (kilograms)</MenuItem>
-              <MenuItem value="g">g (grams)</MenuItem>
-              <MenuItem value="gal">gal (gallons)</MenuItem>
-              <MenuItem value="qt">qt (quarts)</MenuItem>
-              <MenuItem value="pt">pt (pints)</MenuItem>
-              <MenuItem value="c">c (cups)</MenuItem>
-              <MenuItem value="fl oz">fl oz (fluid ounces)</MenuItem>
-              <MenuItem value="ml">ml (milliliters)</MenuItem>
-              <MenuItem value="l">l (liters)</MenuItem>
-              <MenuItem value="pcs">pcs (pieces)</MenuItem>
-              <MenuItem value="cans">cans (cans)</MenuItem>
-              <MenuItem value="bottles">bottles (bottles)</MenuItem>
-              <MenuItem value="jars">jars (jars)</MenuItem>
-              <MenuItem value="boxes">boxes (boxes)</MenuItem>
-              <MenuItem value="packs">packs (packs)</MenuItem>
-              <MenuItem value="tbsp">tbsp (tablespoons)</MenuItem>
-              <MenuItem value="tsp">tsp (teaspoons)</MenuItem>
-              <MenuItem value="bags">bags (bags)</MenuItem>
-              <MenuItem value="slices">slices (slices)</MenuItem>
-              <MenuItem value="bars">bars (bars)</MenuItem>
+              {unitsOfMeasurement.map((unit) => (
+                <MenuItem key={unit} value={unit.split(" ")[0]}>
+                  {unit}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           <DatePicker

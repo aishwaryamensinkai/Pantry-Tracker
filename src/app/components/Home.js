@@ -19,9 +19,9 @@ import {
   Grid,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import AddItemModal from "../components/AddItemModal";
-import InventoryList from "../components/InventoryList";
-import SearchBar from "../components/SearchBar";
+import AddItemModal from "./AddItemModal";
+import InventoryList from "./InventoryList";
+import SearchBar from "./SearchBar";
 import { useSnackbar } from "notistack";
 import { firestore } from "../firebase/firebase";
 import {

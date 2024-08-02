@@ -62,7 +62,7 @@ export default function InventoryList({ inventory, removeItem, editItem }) {
               <Button
                 variant="contained"
                 color="error"
-                onClick={() => removeItem(item.id)} // Use item.id instead of item.name
+                onClick={() => removeItem(item.id)}
               >
                 Remove
               </Button>
