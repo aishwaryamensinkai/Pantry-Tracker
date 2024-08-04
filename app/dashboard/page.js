@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -36,25 +35,20 @@ function Dashboard() {
         setModalOpen={setModalOpen}
       />
       <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-        <div
-          className="p-8 rounded-lg shadow-lg bg-white text-center max-w-md mx-auto"
-          style={{ marginTop: "85px" }}
-        >
-          <h1 className="text-4xl font-bold mb-4 text-gray-800">
-            Welcome to the Pantry Tracker, {user ? user.displayName : "Guest"}!
-          </h1>
-          {user && (
-            <div className="mb-4">
-              <p className="text-lg text-gray-600">{user.email}</p>
-            </div>
-          )}
-          <Pantry
-            showNotifications={showNotifications}
-            setShowNotifications={setShowNotifications}
-            modalOpen={modalOpen}
-            setModalOpen={setModalOpen}
-          />
+        <div style={{ marginTop: "85px", textAlign: "center" }}>
+          <h1>Hi {user ? user.displayName : "Guest"}!</h1>
+          <p>
+            Manage your pantry items efficiently and never run out of your
+            essential groceries. Get notified about low stock items, track your
+            pantry inventory, and much more!
+          </p>
         </div>
+        <Pantry
+          showNotifications={showNotifications}
+          setShowNotifications={setShowNotifications}
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+        />
       </div>
     </div>
   );

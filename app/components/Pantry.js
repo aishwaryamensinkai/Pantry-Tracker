@@ -5,7 +5,6 @@ import { useState, useEffect, useCallback } from "react";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AddItemModal from "./AddItemModal";
 import InventoryList from "./InventoryList";
-import SearchBar from "./SearchBar";
 import { useSnackbar } from "notistack";
 import { firestore } from "../firebase/config";
 import {
@@ -15,13 +14,15 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import debounce from "lodash/debounce";
 import CloseIcon from "@mui/icons-material/Close";
-import { AddCircleOutlineOutlined } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
+import { getAuth } from "firebase/auth";
 
-function Pantry() {
+function Pantry({ user }) {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -76,7 +77,11 @@ function Pantry() {
 
   const fetchItems = async () => {
     try {
-      const querySnapshot = await getDocs(collection(firestore, "inventory"));
+      const q = query(
+        collection(firestore, "inventory"),
+        where("userId", "==", user.uid)
+      );
+      const querySnapshot = await getDocs(q);
       const itemsData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -90,8 +95,10 @@ function Pantry() {
   };
 
   useEffect(() => {
-    fetchItems();
-  }, []);
+    if (user) {
+      fetchItems();
+    }
+  }, [user]);
 
   const checkForAlerts = (itemsData) => {
     const now = new Date();
@@ -140,7 +147,10 @@ function Pantry() {
 
   const addItem = async (item) => {
     try {
-      await addDoc(collection(firestore, "inventory"), item);
+      await addDoc(collection(firestore, "inventory"), {
+        ...item,
+        userId: user.uid,
+      });
       fetchItems();
       enqueueSnackbar("Item added successfully!", { variant: "success" });
     } catch (error) {
@@ -267,37 +277,30 @@ function Pantry() {
         open={modalOpen}
         handleClose={() => setModalOpen(false)}
         item={currentItem}
-        setItem={setCurrentItem}
         addItem={addItem}
         updateItem={updateItem}
         editMode={editMode}
       />
       {showNotifications && (
-        <div className="notifications-popup">
-          <div className="popup-header">
-            <h6>Notifications</h6>
-            <button
-              className="close-button"
-              onClick={() => setShowNotifications(false)}
-            >
-              <CloseIcon />
-            </button>
-          </div>
-          {notifications.length === 0 ? (
-            <p>No notifications.</p>
-          ) : (
-            notifications.map((notification, index) => (
-              <p key={index} className="notification">
-                {notification.message}
-                {notification.date && (
-                  <span> (Expiring on {notification.date})</span>
-                )}
-                {notification.count !== undefined && (
-                  <span> (Only {notification.count} left)</span>
-                )}
-              </p>
-            ))
-          )}
+        <div className="notifications-panel">
+          <h3>Notifications</h3>
+          {notifications.map((notification, index) => (
+            <div key={index} className="notification">
+              <span className="message">{notification.message}</span>
+              {notification.type === "expiring" && (
+                <span className="date">{notification.date}</span>
+              )}
+              {notification.type === "low" && (
+                <span className="count">{notification.count}</span>
+              )}
+            </div>
+          ))}
+          <button
+            className="close-notifications"
+            onClick={() => setShowNotifications(false)}
+          >
+            <CloseIcon />
+          </button>
         </div>
       )}
     </div>
