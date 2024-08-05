@@ -1,7 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-"use client";
-
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AddItemModal from "./AddItemModal";
 import InventoryList from "./InventoryList";
@@ -19,8 +16,6 @@ import {
 } from "firebase/firestore";
 import debounce from "lodash/debounce";
 import CloseIcon from "@mui/icons-material/Close";
-import SearchIcon from "@mui/icons-material/Search";
-import { getAuth } from "firebase/auth";
 
 function Pantry({ user }) {
   const [items, setItems] = useState([]);
@@ -44,6 +39,7 @@ function Pantry({ user }) {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [expirationFilter, setExpirationFilter] = useState("");
   const [quantityFilter, setQuantityFilter] = useState("");
+
   const categories = [
     "Grains",
     "Canned Goods",
@@ -56,26 +52,29 @@ function Pantry({ user }) {
     "Condiments",
     "Other",
   ];
-  const filterItems = (items) => {
-    return items.filter((item) => {
-      const matchesCategory =
-        !categoryFilter || item.category === categoryFilter;
-      const matchesExpiration =
-        !expirationFilter ||
-        new Date(item.expirationDate) <= new Date(expirationFilter);
-      const matchesQuantity =
-        !quantityFilter || item.quantity >= Number(quantityFilter);
 
-      return matchesCategory && matchesExpiration && matchesQuantity;
-    });
-  };
+  const filterItems = useCallback(
+    (items) => {
+      return items.filter((item) => {
+        const matchesCategory =
+          !categoryFilter || item.category === categoryFilter;
+        const matchesExpiration =
+          !expirationFilter ||
+          new Date(item.expirationDate) <= new Date(expirationFilter);
+        const matchesQuantity =
+          !quantityFilter || item.quantity >= Number(quantityFilter);
+        return matchesCategory && matchesExpiration && matchesQuantity;
+      });
+    },
+    [categoryFilter, expirationFilter, quantityFilter]
+  );
 
   useEffect(() => {
     const filtered = filterItems(items);
     setFilteredItems(filtered);
-  }, [items, categoryFilter, expirationFilter, quantityFilter]);
+  }, [items, filterItems]);
 
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     try {
       const q = query(
         collection(firestore, "inventory"),
@@ -88,45 +87,43 @@ function Pantry({ user }) {
       }));
       setItems(itemsData);
       setFilteredItems(itemsData);
-      checkForAlerts(itemsData); // Check for low inventory or expiring items
+      checkForAlerts(itemsData);
     } catch (error) {
       enqueueSnackbar("Failed to fetch items.", { variant: "error" });
     }
-  };
+  }, [user, enqueueSnackbar]);
 
   useEffect(() => {
     if (user) {
       fetchItems();
     }
-  }, [user]);
+  }, [user, fetchItems]);
 
-  const checkForAlerts = (itemsData) => {
+  const checkForAlerts = useCallback((itemsData) => {
     const now = new Date();
-    const alerts = [];
-    itemsData.forEach((item) => {
+    const alerts = itemsData.reduce((acc, item) => {
       if (item.expirationDate) {
         const expDate = new Date(item.expirationDate);
         const diffDays = Math.ceil((expDate - now) / (1000 * 60 * 60 * 24));
         if (diffDays <= 7) {
-          // Notify if expiring in 7 days or less
-          alerts.push({
+          acc.push({
             type: "expiring",
-            message: `Item ${item.name}.`,
+            message: `Item ${item.name} is expiring soon.`,
             date: expDate.toLocaleDateString(),
           });
         }
       }
       if (item.quantity < 5) {
-        // Notify if quantity is less than 5
-        alerts.push({
+        acc.push({
           type: "low",
           message: `Item ${item.name} is running low.`,
           count: item.quantity,
         });
       }
-    });
+      return acc;
+    }, []);
     setNotifications(alerts);
-  };
+  }, []);
 
   const handleSearch = useCallback(
     debounce((query) => {
@@ -146,6 +143,12 @@ function Pantry({ user }) {
   );
 
   const addItem = async (item) => {
+    if (!user?.uid) {
+      console.error("User is not authenticated or user ID is missing.");
+      enqueueSnackbar("User is not authenticated.", { variant: "error" });
+      return;
+    }
+
     try {
       await addDoc(collection(firestore, "inventory"), {
         ...item,
@@ -154,6 +157,7 @@ function Pantry({ user }) {
       fetchItems();
       enqueueSnackbar("Item added successfully!", { variant: "success" });
     } catch (error) {
+      console.error("Error adding item:", error);
       enqueueSnackbar("Failed to add item.", { variant: "error" });
     }
   };
@@ -165,6 +169,7 @@ function Pantry({ user }) {
       fetchItems();
       enqueueSnackbar("Item updated successfully!", { variant: "success" });
     } catch (error) {
+      console.error("Error updating item:", error);
       enqueueSnackbar("Failed to update item.", { variant: "error" });
     }
   };
@@ -201,16 +206,21 @@ function Pantry({ user }) {
     setModalOpen(true);
   };
 
+  const handleClose = () => {
+    setModalOpen(false);
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+
   return (
     <div className="pantry-container">
       <div className="header">
         <button className="add-button" onClick={handleAddItemClick}>
           Add Item
         </button>
-        <button
-          className="notifications-button"
-          onClick={() => setShowNotifications(!showNotifications)}
-        >
+        <button className="notifications-button" onClick={toggleNotifications}>
           <span className="badge">{notifications.length}</span>
           <NotificationsIcon />
         </button>
@@ -226,9 +236,6 @@ function Pantry({ user }) {
             handleSearch(e.target.value);
           }}
         />
-        <button className="search-icon">
-          <SearchIcon /> {/* Replace with the actual search icon component */}
-        </button>
       </div>
 
       {/* Filters */}
@@ -275,32 +282,36 @@ function Pantry({ user }) {
       />
       <AddItemModal
         open={modalOpen}
-        handleClose={() => setModalOpen(false)}
+        handleClose={handleClose}
         item={currentItem}
+        setItem={setCurrentItem}
         addItem={addItem}
         updateItem={updateItem}
         editMode={editMode}
       />
+
       {showNotifications && (
         <div className="notifications-panel">
-          <h3>Notifications</h3>
-          {notifications.map((notification, index) => (
-            <div key={index} className="notification">
-              <span className="message">{notification.message}</span>
-              {notification.type === "expiring" && (
-                <span className="date">{notification.date}</span>
-              )}
-              {notification.type === "low" && (
-                <span className="count">{notification.count}</span>
-              )}
-            </div>
-          ))}
-          <button
-            className="close-notifications"
-            onClick={() => setShowNotifications(false)}
-          >
-            <CloseIcon />
-          </button>
+          <div className="panel-header">
+            <h3>Notifications</h3>
+            <button
+              className="close-notifications"
+              onClick={toggleNotifications}
+            >
+              <CloseIcon />
+            </button>
+          </div>
+          <ul>
+            {notifications.map((notification, index) => (
+              <li key={index}>
+                <span>{notification.message}</span>
+                {notification.date && <span> - {notification.date}</span>}
+                {notification.count && (
+                  <span> - {notification.count} remaining</span>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

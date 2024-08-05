@@ -2,6 +2,7 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+// Sample data for categories, locations, and units of measurement
 const categories = [
   "Grains",
   "Canned Goods",
@@ -52,38 +53,45 @@ const unitsOfMeasurement = [
   "bars (bars)",
 ];
 
-export default function AddItemModal({
+const AddItemModal = ({
   open,
   handleClose,
   item,
-  setItem,
+  setItem, // Ensure this is a function passed from the parent
   addItem,
   updateItem,
   editMode,
-}) {
+}) => {
+  // Handle input field changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setItem((prevItem) => ({
-      ...prevItem,
-      [name]: value,
-    }));
+    if (typeof setItem === "function") {
+      // Check if setItem is a function
+      setItem((prevItem) => ({ ...prevItem, [name]: value }));
+    }
   };
 
+  // Handle select field changes
   const handleSelectChange = (e) => {
     const { name, value } = e.target;
-    setItem((prevItem) => ({
-      ...prevItem,
-      [name]: value,
-    }));
+    if (typeof setItem === "function") {
+      // Check if setItem is a function
+      setItem((prevItem) => ({ ...prevItem, [name]: value }));
+    }
   };
 
+  // Handle date picker changes
   const handleDateChange = (date) => {
-    setItem((prevItem) => ({
-      ...prevItem,
-      expirationDate: date ? date.toISOString() : "",
-    }));
+    if (typeof setItem === "function") {
+      // Check if setItem is a function
+      setItem((prevItem) => ({
+        ...prevItem,
+        expirationDate: date ? date.toISOString() : "",
+      }));
+    }
   };
 
+  // Validate form fields
   const validateForm = () => {
     const requiredFields = [
       "name",
@@ -106,6 +114,7 @@ export default function AddItemModal({
     return true;
   };
 
+  // Handle form submission
   const handleSubmit = () => {
     if (validateForm()) {
       const updatedItem = {
@@ -123,10 +132,10 @@ export default function AddItemModal({
     }
   };
 
+  // Convert date strings to Date objects if needed
   const expirationDate = item.expirationDate
     ? new Date(item.expirationDate)
     : null;
-
   const lastUpdatedDate = item.lastUpdated ? new Date(item.lastUpdated) : null;
 
   return (
@@ -244,4 +253,6 @@ export default function AddItemModal({
       </div>
     </div>
   );
-}
+};
+
+export default AddItemModal;

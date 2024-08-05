@@ -44,6 +44,7 @@ function Dashboard() {
           </p>
         </div>
         <Pantry
+          user={user}
           showNotifications={showNotifications}
           setShowNotifications={setShowNotifications}
           modalOpen={modalOpen}
