@@ -2,7 +2,6 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-// Sample data for categories, locations, and units of measurement
 const categories = [
   "Grains",
   "Canned Goods",
@@ -62,28 +61,22 @@ const AddItemModal = ({
   updateItem,
   editMode,
 }) => {
-  // Handle input field changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (typeof setItem === "function") {
-      // Check if setItem is a function
       setItem((prevItem) => ({ ...prevItem, [name]: value }));
     }
   };
 
-  // Handle select field changes
   const handleSelectChange = (e) => {
     const { name, value } = e.target;
     if (typeof setItem === "function") {
-      // Check if setItem is a function
       setItem((prevItem) => ({ ...prevItem, [name]: value }));
     }
   };
 
-  // Handle date picker changes
   const handleDateChange = (date) => {
     if (typeof setItem === "function") {
-      // Check if setItem is a function
       setItem((prevItem) => ({
         ...prevItem,
         expirationDate: date ? date.toISOString() : "",
@@ -91,7 +84,6 @@ const AddItemModal = ({
     }
   };
 
-  // Validate form fields
   const validateForm = () => {
     const requiredFields = [
       "name",
@@ -114,7 +106,6 @@ const AddItemModal = ({
     return true;
   };
 
-  // Handle form submission
   const handleSubmit = () => {
     if (validateForm()) {
       const updatedItem = {
@@ -132,7 +123,6 @@ const AddItemModal = ({
     }
   };
 
-  // Convert date strings to Date objects if needed
   const expirationDate = item.expirationDate
     ? new Date(item.expirationDate)
     : null;
