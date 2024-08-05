@@ -46,6 +46,12 @@ const InventoryList = ({ inventory, removeItem, editItem }) => {
               <strong>Last Updated:</strong>{" "}
               {item.lastUpdated ? formatDateTime(item.lastUpdated) : "N/A"}
             </p>
+            {item.photo && (
+              <div className="item-detail">
+                <strong>Photo:</strong>
+                <img src={item.photo} alt={item.name} className="item-photo" />
+              </div>
+            )}
             <div className="item-actions">
               <button className="edit-btn" onClick={() => editItem(item)}>
                 Edit

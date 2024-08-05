@@ -364,6 +364,111 @@ p {
   /* Reduced font size */
 }
 
+/* AddItemModal */
+/* General styling for form buttons */
+.form-group button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin: 5px;
+}
+
+/* Hover effect for form buttons */
+.form-group button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Cancel button specific styling */
+.form-group button[type="button"] {
+  background-color: #dc3545;
+}
+
+.form-group button[type="button"]:hover {
+  background-color: #c82333;
+}
+
+/* ImageCapture Component */
+/* Container styling */
+.image-capture-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+/* Button styling */
+.image-capture-container button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.image-capture-container button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Button for clearing image */
+.image-capture-container .clear-btn {
+  background-color: #dc3545;
+}
+
+.image-capture-container .clear-btn:hover {
+  background-color: #c82333;
+}
+
+/* Styling for the captured image */
+.captured-image {
+  margin-top: 20px;
+  max-width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Webcam container */
+.webcam-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.webcam-container webcam {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Close button */
+.close-btn {
+  background-color: #6c757d;
+}
+
+.close-btn:hover {
+  background-color: #5a6268;
+}
+
+
 /* NotificationComponent */
 .notifications-dropdown {
   position: absolute;
