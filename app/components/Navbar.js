@@ -48,6 +48,9 @@ const Navbar = ({ user }) => {
         <div className="nav-links">
           <a onClick={() => router.push("/dashboard")}>Dashboard</a>
           <a onClick={() => router.push("/analysis")}>Analysis</a>
+          <a onClick={() => router.push("/generate-recipes")}>
+            Generate Recipes
+          </a>
           {user ? (
             <>
               <img

@@ -17,7 +17,6 @@ import {
 } from "firebase/firestore";
 import debounce from "lodash/debounce";
 import CloseIcon from "@mui/icons-material/Close";
-import RecipeSuggestions from "./RecipeSuggestions";
 
 function Pantry({ user }) {
   const [items, setItems] = useState([]);
@@ -318,8 +317,6 @@ function Pantry({ user }) {
           </ul>
         </div>
       )}
-
-      <RecipeSuggestions pantryItems={items} />
     </div>
   );
 }
