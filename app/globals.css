@@ -159,9 +159,9 @@
     margin-right: 20px;
   }
 
-    .notifications-button .badge{
-      margin-top: 295px !important;
-    }
+  .notifications-button .badge {
+    margin-top: 295px !important;
+  }
 }
 
 @media only screen and (max-width: 1024px) {
@@ -191,7 +191,6 @@
 }
 
 @keyframes blink-caret {
-
   from,
   to {
     border-color: transparent;
@@ -208,9 +207,7 @@
   white-space: nowrap;
   margin: 0 auto;
   letter-spacing: 0.15em;
-  animation:
-    typing 3.5s steps(40, end),
-    blink-caret 0.75s step-end infinite;
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
 }
 
 .fade-in-animation {
@@ -468,7 +465,6 @@ p {
   background-color: #5a6268;
 }
 
-
 /* NotificationComponent */
 .notifications-dropdown {
   position: absolute;
@@ -595,11 +591,18 @@ p {
 }
 
 .inventory-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.item-info {
+  flex: 1;
 }
 
 .item-name {
@@ -618,7 +621,6 @@ p {
 
 .item-actions {
   display: flex;
-  justify-content: flex-end;
   gap: 10px;
   margin-top: 15px;
 }
@@ -656,6 +658,19 @@ p {
   font-size: 1.2em;
   color: #777;
   padding: 20px;
+}
+
+.item-photo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 10px;
+}
+
+.item-photo {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 5px;
 }
 
 /* Notifications Panel */
@@ -723,77 +738,4 @@ p {
 .notifications-panel ul li span:last-child {
   font-size: 14px;
   color: #666;
-}
-/* Inventory List */
-.inventory-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-}
-
-.inventory-item {
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.item-name {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.item-detail {
-  margin: 5px 0;
-}
-
-.item-detail strong {
-  color: #555;
-}
-
-.item-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.edit-btn,
-.remove-btn {
-  padding: 8px 16px;
-  font-size: 0.9em;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.edit-btn {
-  background-color: #4caf50;
-  color: white;
-}
-
-.edit-btn:hover {
-  background-color: #45a049;
-}
-
-.remove-btn {
-  background-color: #f44336;
-  color: white;
-}
-
-.remove-btn:hover {
-  background-color: #d32f2f;
-}
-
-.no-items {
-  text-align: center;
-  font-size: 1.2em;
-  color: #777;
-  padding: 20px;
 }
