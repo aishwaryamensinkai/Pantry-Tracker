@@ -23,40 +23,47 @@ const InventoryList = ({ inventory, removeItem, editItem }) => {
       ) : (
         inventory.map((item) => (
           <div key={item.id} className="inventory-item">
-            <h2 className="item-name">
-              {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
-            </h2>
-            <p className="item-detail">
-              <strong>Category:</strong> {item.category}
-            </p>
-            <p className="item-detail">
-              <strong>Quantity:</strong> {item.quantity} {item.unit}
-            </p>
-            <p className="item-detail">
-              <strong>Expiration Date:</strong>{" "}
-              {item.expirationDate ? formatDate(item.expirationDate) : "N/A"}
-            </p>
-            <p className="item-detail">
-              <strong>Location:</strong> {item.location}
-            </p>
-            <p className="item-detail">
-              <strong>Notes:</strong> {item.notes}
-            </p>
-            <p className="item-detail">
-              <strong>Last Updated:</strong>{" "}
-              {item.lastUpdated ? formatDateTime(item.lastUpdated) : "N/A"}
-            </p>
-            <div className="item-actions">
-              <button className="edit-btn" onClick={() => editItem(item)}>
-                Edit
-              </button>
-              <button
-                className="remove-btn"
-                onClick={() => removeItem(item.id)}
-              >
-                Remove
-              </button>
+            <div className="item-info">
+              <h2 className="item-name">
+                {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
+              </h2>
+              <p className="item-detail">
+                <strong>Category:</strong> {item.category}
+              </p>
+              <p className="item-detail">
+                <strong>Quantity:</strong> {item.quantity} {item.unit}
+              </p>
+              <p className="item-detail">
+                <strong>Expiration Date:</strong>{" "}
+                {item.expirationDate ? formatDate(item.expirationDate) : "N/A"}
+              </p>
+              <p className="item-detail">
+                <strong>Location:</strong> {item.location}
+              </p>
+              <p className="item-detail">
+                <strong>Notes:</strong> {item.notes}
+              </p>
+              <p className="item-detail">
+                <strong>Last Updated:</strong>{" "}
+                {item.lastUpdated ? formatDateTime(item.lastUpdated) : "N/A"}
+              </p>
+              <div className="item-actions">
+                <button className="edit-btn" onClick={() => editItem(item)}>
+                  Edit
+                </button>
+                <button
+                  className="remove-btn"
+                  onClick={() => removeItem(item.id)}
+                >
+                  Remove
+                </button>
+              </div>
             </div>
+            {item.photo && (
+              <div className="item-photo-container">
+                <img src={item.photo} alt={item.name} className="item-photo" />
+              </div>
+            )}
           </div>
         ))
       )}

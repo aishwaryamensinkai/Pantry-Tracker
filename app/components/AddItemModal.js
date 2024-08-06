@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ImageCapture from "./ImageCapture";
 
-// Sample data for categories, locations, and units of measurement
 const categories = [
   "Grains",
   "Canned Goods",
@@ -57,33 +57,29 @@ const AddItemModal = ({
   open,
   handleClose,
   item,
-  setItem, // Ensure this is a function passed from the parent
+  setItem,
   addItem,
   updateItem,
   editMode,
 }) => {
-  // Handle input field changes
+  const [isImageCaptureOpen, setIsImageCaptureOpen] = useState(false);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (typeof setItem === "function") {
-      // Check if setItem is a function
       setItem((prevItem) => ({ ...prevItem, [name]: value }));
     }
   };
 
-  // Handle select field changes
   const handleSelectChange = (e) => {
     const { name, value } = e.target;
     if (typeof setItem === "function") {
-      // Check if setItem is a function
       setItem((prevItem) => ({ ...prevItem, [name]: value }));
     }
   };
 
-  // Handle date picker changes
   const handleDateChange = (date) => {
     if (typeof setItem === "function") {
-      // Check if setItem is a function
       setItem((prevItem) => ({
         ...prevItem,
         expirationDate: date ? date.toISOString() : "",
@@ -91,7 +87,6 @@ const AddItemModal = ({
     }
   };
 
-  // Validate form fields
   const validateForm = () => {
     const requiredFields = [
       "name",
@@ -114,7 +109,6 @@ const AddItemModal = ({
     return true;
   };
 
-  // Handle form submission
   const handleSubmit = () => {
     if (validateForm()) {
       const updatedItem = {
@@ -132,7 +126,16 @@ const AddItemModal = ({
     }
   };
 
-  // Convert date strings to Date objects if needed
+  const handleImageCaptured = (imageSrc) => {
+    if (typeof setItem === "function") {
+      setItem((prevItem) => ({
+        ...prevItem,
+        photo: imageSrc,
+      }));
+    }
+    setIsImageCaptureOpen(false);
+  };
+
   const expirationDate = item.expirationDate
     ? new Date(item.expirationDate)
     : null;
@@ -195,25 +198,25 @@ const AddItemModal = ({
           >
             <option value="">Select a unit</option>
             {unitsOfMeasurement.map((unit) => (
-              <option key={unit} value={unit.split(" ")[0]}>
+              <option key={unit} value={unit}>
                 {unit}
               </option>
             ))}
           </select>
         </div>
-        <div className="form-group date-picker-container">
+        <div className="form-group">
           <label htmlFor="expirationDate">Expiration Date</label>
           <DatePicker
+            id="expirationDate"
             selected={expirationDate}
             onChange={handleDateChange}
-            dateFormat="yyyy/MM/dd"
+            dateFormat="yyyy-MM-dd"
             placeholderText="Select expiration date"
-            customInput={<input id="expirationDate" />}
             required
           />
         </div>
         <div className="form-group">
-          <label htmlFor="location">Pantry Location</label>
+          <label htmlFor="location">Location</label>
           <select
             id="location"
             name="location"
@@ -236,20 +239,41 @@ const AddItemModal = ({
             name="notes"
             value={item.notes}
             onChange={handleInputChange}
-            placeholder="Enter additional notes"
-            rows="4"
-            cols="50"
+            placeholder="Enter any notes (optional)"
           />
         </div>
+        <div className="form-group">
+          <button
+            type="button"
+            onClick={() => setIsImageCaptureOpen(!isImageCaptureOpen)}
+          >
+            {isImageCaptureOpen ? "Close Image Capture" : "Capture Image"}
+          </button>
+          {isImageCaptureOpen && (
+            <ImageCapture onImageCaptured={handleImageCaptured} />
+          )}
+        </div>
+        <div className="form-group">
+          <label htmlFor="photo">Captured Photo</label>
+          {item.photo && <img src={item.photo} alt="Captured" />}
+        </div>
+        <div className="form-group">
+          <button
+            type="button"
+            onClick={handleSubmit}
+            style={{ background: "#4CAF4F" }}
+          >
+            {editMode ? "Update Item" : "Add Item"}
+          </button>
+          <button type="button" onClick={handleClose}>
+            Cancel
+          </button>
+        </div>
         {lastUpdatedDate && (
-          <p>Last Updated: {lastUpdatedDate.toLocaleString()}</p>
+          <p className="last-updated">
+            Last Updated: {lastUpdatedDate.toLocaleString()}
+          </p>
         )}
-        <button className="submit-btn" onClick={handleSubmit}>
-          {editMode ? "Update" : "Add"}
-        </button>
-        <button className="close-btn" onClick={handleClose}>
-          Close
-        </button>
       </div>
     </div>
   );
