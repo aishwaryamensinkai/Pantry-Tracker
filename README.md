@@ -1,4 +1,5 @@
 ## Resources
+- https://openrouter.ai/
 
 - To include the tree structure of the project install tree by using command in mac
   ```bash
