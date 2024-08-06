@@ -17,6 +17,7 @@ import {
 } from "firebase/firestore";
 import debounce from "lodash/debounce";
 import CloseIcon from "@mui/icons-material/Close";
+import RecipeSuggestions from "./RecipeSuggestions";
 
 function Pantry({ user }) {
   const [items, setItems] = useState([]);
@@ -222,8 +223,10 @@ function Pantry({ user }) {
           Add Item
         </button>
         <button className="notifications-button" onClick={toggleNotifications}>
-          <span className="badge">{notifications.length}</span>
-          <NotificationsIcon />
+          <div className="notifications-content">
+            <NotificationsIcon />
+            <span className="notification-count">{notifications.length}</span>
+          </div>
         </button>
       </div>
       {/* Search Bar */}
@@ -315,6 +318,8 @@ function Pantry({ user }) {
           </ul>
         </div>
       )}
+
+      <RecipeSuggestions pantryItems={items} />
     </div>
   );
 }
