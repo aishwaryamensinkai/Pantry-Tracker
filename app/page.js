@@ -67,11 +67,36 @@ const Home = () => {
                 </p>
               </div>
               <div className="feature">
-                <h2 className="featureTitle">Cloud Sync</h2>
+                <h2 className="featureTitle">Export PDF</h2>
                 <p className="featureDescription">
-                  Sync your inventory across multiple devices with our
-                  cloud-based solution. Access your pantry from anywhere,
-                  anytime.
+                  Effortlessly manage and keep track of your pantry items by
+                  generating and exporting your pantry list as a PDF, ensuring
+                  you have easy access to your inventory anywhere, anytime.
+                </p>
+              </div>
+              <div className="feature">
+                <h2 className="featureTitle">Data Analysis</h2>
+                <p className="featureDescription">
+                  Analyze your pantry data with comprehensive charts and graphs.
+                  Visualize your inventory trends with pie charts and bar graphs
+                  to make informed decisions about restocking and usage
+                  patterns.
+                </p>
+              </div>
+              <div className="feature">
+                <h2 className="featureTitle">Recipe Suggestions</h2>
+                <p className="featureDescription">
+                  Explore mouthwatering recipes crafted from the items already
+                  in your pantry. SignUp to discover three incredible recipes
+                  customized just for you.
+                </p>
+              </div>
+              <div className="feature">
+                <h2 className="featureTitle">View User Profile</h2>
+                <p className="featureDescription">
+                  Access and update your user profile to personalize your pantry
+                  management experience. Keep your information up-to-date for a
+                  more tailored experience.
                 </p>
               </div>
             </div>
@@ -80,11 +105,6 @@ const Home = () => {
               your personalized dashboard and begin managing your pantry
               effectively.
             </p>
-            {/* {!user && (
-              <button className="signinButton" onClick={signInWithGoogle}>
-                Sign in with Google
-              </button>
-            )} */}
           </div>
         </div>
       </main>

@@ -1,4 +1,5 @@
 "use client";
+// app/analysis/page.js
 
 import { useEffect, useState, useCallback } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -53,11 +54,7 @@ function AnalysisPage() {
 
   return (
     <div className="dashboard">
-      <Navbar
-        user={user}
-        setShowNotifications={() => {}}
-        setModalOpen={() => {}}
-      />
+      <Navbar user={user} items={items} />
       <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
         <div style={{ marginTop: "85px", textAlign: "center" }}>
           <InventoryAnalysis items={items} />

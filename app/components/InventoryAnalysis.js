@@ -1,3 +1,5 @@
+// components/InventoryAnalysis.js
+
 import React from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import {
@@ -54,7 +56,6 @@ const InventoryAnalysis = ({ items }) => {
     ],
   };
 
-  // Calculate data for the bar chart (top 5 items)
   const sortedItems = [...items].sort((a, b) => b.quantity - a.quantity);
   const topItems = sortedItems.slice(0, 5);
 
@@ -70,11 +71,6 @@ const InventoryAnalysis = ({ items }) => {
       },
     ],
   };
-
-  // Additional Analysis
-  const totalItems = items.length;
-  const totalQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
-  const averageQuantity = totalQuantity / totalItems;
 
   const leastStockedItems = [...items]
     .sort((a, b) => a.quantity - b.quantity)
@@ -114,19 +110,19 @@ const InventoryAnalysis = ({ items }) => {
       <h2>Inventory Analysis</h2>
       <div className="summary">
         <p>
-          <strong>Total Number of Items:</strong> {totalItems}
+          <strong>Total Number of Items:</strong> {items.length}
         </p>
       </div>
       <div className="charts-container">
-        <div className="chart-item">
+        <div id="pie-chart" className="chart-item">
           <h3>Inventory Overview by Category</h3>
           <Pie data={pieData} options={commonOptions} />
         </div>
-        <div className="chart-item">
+        <div id="bar-chart" className="chart-item">
           <h3>Top 5 Items by Quantity</h3>
           <Bar data={barData} options={commonOptions} />
         </div>
-        <div className="chart-item">
+        <div id="least-stocked-chart" className="chart-item">
           <h3>Least Stocked Items</h3>
           <Bar data={leastStockedData} options={commonOptions} />
         </div>

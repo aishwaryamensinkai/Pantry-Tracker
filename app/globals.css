@@ -1,5 +1,4 @@
 /* Home.css */
-
 .home {
   font-family: "Arial", sans-serif;
   display: flex;
@@ -260,25 +259,20 @@
 /* Modal title styling */
 .modal-content h2 {
   margin: 0 0 15px;
-  /* Reduced margin */
   font-size: 20px;
-  /* Reduced font size */
   color: #333;
 }
 
 /* Form group styling */
 .form-group {
   margin-bottom: 10px;
-  /* Reduced margin */
 }
 
 /* Label styling */
 label {
   display: block;
   margin-bottom: 6px;
-  /* Reduced margin */
   font-size: 14px;
-  /* Reduced font size */
   font-weight: 600;
   color: #555;
 }
@@ -290,13 +284,11 @@ select,
 textarea {
   width: 100%;
   padding: 10px;
-  /* Reduced padding */
   margin: 5px 0;
   border: 1px solid #ddd;
   border-radius: 6px;
   box-sizing: border-box;
   font-size: 14px;
-  /* Reduced font size */
 }
 
 input[type="text"]::placeholder,
@@ -310,12 +302,10 @@ input[type="number"]::placeholder {
   background-color: #007bff;
   color: #fff;
   padding: 10px 18px;
-  /* Reduced padding */
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  /* Reduced font size */
   transition: background-color 0.3s ease, transform 0.3s ease;
   margin: 5px;
 }
@@ -337,7 +327,6 @@ input[type="number"]::placeholder {
 /* Paragraph styling */
 p {
   margin: 10px 0;
-  /* Reduced margin */
   font-style: italic;
   color: #666;
 }
@@ -352,17 +341,14 @@ p {
 .date-picker-container input {
   width: 100%;
   padding: 10px;
-  /* Reduced padding */
   margin: 5px 0;
   border: 1px solid #ddd;
   border-radius: 6px;
   box-sizing: border-box;
   font-size: 14px;
-  /* Reduced font size */
 }
 
 /* AddItemModal */
-/* General styling for form buttons */
 .form-group button {
   background-color: #007bff;
   color: #fff;
@@ -391,7 +377,6 @@ p {
 }
 
 /* ImageCapture Component */
-/* Container styling */
 .image-capture-container {
   display: flex;
   flex-direction: column;
@@ -537,7 +522,6 @@ p {
   padding: 20px;
   margin: auto;
   position: relative;
-  /* Ensure that the notifications panel is positioned relative to this container */
 }
 
 .header {
@@ -546,7 +530,6 @@ p {
   align-items: center;
   margin-bottom: 20px;
   position: relative;
-  /* Ensure that the notifications panel aligns correctly */
 }
 
 .add-button,
@@ -559,7 +542,6 @@ p {
   cursor: pointer;
   font-size: 16px;
   position: relative;
-  /* Position relative to enable badge positioning */
 }
 
 .add-button:hover,
@@ -705,7 +687,6 @@ p {
 .notifications-panel {
   position: absolute;
   top: 60px;
-  /* Adjust based on header height */
   right: 20px;
   width: 300px;
   max-height: 400px;
@@ -815,45 +796,9 @@ p {
   cursor: not-allowed;
 }
 
-/* app/components/InventoryAnalysis.css */
-.inventory-analysis {
-  padding: 20px;
-}
-
-.charts-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-@media (min-width: 768px) {
-  .charts-container {
-    flex-direction: row;
-  }
-}
-
-.chart-item {
-  flex: 1;
-  min-width: 300px;
-  height: 500px;
-  position: relative;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.chart-item canvas {
-  height: 85% !important;
-  width: 85% !important;
-}
-
-.chart-item h3 {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
 /* Logo */
 .logo {
   height: 40px;
-  /* Adjust the size as needed */
   cursor: pointer;
   margin-right: 20px;
 }
@@ -893,7 +838,7 @@ p {
   background-color: #c00;
 }
 
-/* Add to app/globals.css */
+/* profile */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -905,7 +850,6 @@ p {
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  /* Ensure modal is above other content */
 }
 
 .modal-content {
@@ -959,4 +903,141 @@ p {
 .profile-uid {
   font-size: 1rem;
   color: #999;
+}
+
+.exportButton {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.exportButton:hover {
+  background-color: #357abd;
+}
+
+/* InventoryAnalysis.css */
+
+.inventory-analysis {
+  text-align: center;
+  margin: 20px;
+}
+
+.summary {
+  margin-bottom: 20px;
+}
+
+.charts-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.chart-item {
+  width: 80%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.chart-item h3 {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .chart-item {
+    width: 95%;
+  }
+}
+
+/* General navbar styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  width: 96%;
+  z-index: 1000;
+}
+
+/* Logo */
+.navbar .logo {
+  height: 60px;
+  width: 60px;
+  cursor: pointer;
+}
+
+/* Hamburger menu */
+.navbar .hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.navbar .hamburger div {
+  width: 25px;
+  height: 3px;
+  background-color: black;
+  margin: 3px 0;
+  transition: 0.3s;
+}
+
+/* Active state for hamburger */
+.navbar .hamburger.active div:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.navbar .hamburger.active div:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar .hamburger.active div:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
+/* Navigation links container */
+.navbar .nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    width: 92%;
+  }
+
+  .navbar .hamburger {
+    display: flex;
+    position: absolute;
+    top: 30px;
+    right: 20px;
+  }
+
+  .navbar .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navbar .nav-links.show {
+    display: flex;
+  }
 }
