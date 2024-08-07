@@ -4,6 +4,10 @@
 
 This project is an Pantry Tracker specifically designed for food items, developed as part of the Headstarter AI Fellowship. It features real-time inventory tracking and smart recipe suggestions based on available ingredients. The system allows users to efficiently manage their pantry, reduce food waste, and ensure they always have the necessary ingredients on hand.
 
+## Tasks
+
+![Tasks](image.png)
+
 ## Key Features
 
 - **Real-time Inventory Tracking**: Keep track of your pantry items with up-to-date information on what you have in stock.
@@ -13,7 +17,7 @@ This project is an Pantry Tracker specifically designed for food items, develope
 - **Data Analysis**: Visualize your pantry usage trends with comprehensive charts and graphs, helping you make informed decisions about restocking and consumption patterns.
 
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - [Next.js](https://nextjs.org/)
 - [React](https://reactjs.org/)
@@ -34,12 +38,12 @@ This project is an Pantry Tracker specifically designed for food items, develope
 - [Notistack](https://iamhosseindhv.com/notistack) (notification system)
 
 
-## 🚀 Live Demo
+## Live Demo
 
 Check out the live demo deployed on Vercel: [\[Click Here!\]](https://pantry-tracker-ashy-six.vercel.app/)
 
 
-## 🏁 Getting Started
+## Getting Started
 
 To get a local copy up and running, follow these steps:
 
@@ -94,7 +98,7 @@ npm run dev
 
 6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 If you encounter any issues while setting up or running the project, try the following:
 
@@ -115,11 +119,11 @@ npm run build
 
 4. For LLAMA API issues, verify that your API key is correctly set in the `.env.local` file and that you have sufficient credits in your OpenAI account.
 
-## 🤝 Contributing
+## Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to raise it.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Headstarter AI Fellowship for the opportunity and support
 - LLAMA for providing the powerful API
@@ -177,6 +181,8 @@ The file structure is
   tree -L 5 -I node_modules
   ```
 - How to configure Google Analytics watch this video https://www.youtube.com/watch?v=Z3p6qeU76V0
+
+- Use this link to test Pingdom Website Speed Test https://tools.pingdom.com/#644b651b43400000
 
 ## Deploy on Vercel
 
