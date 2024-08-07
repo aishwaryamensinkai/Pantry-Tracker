@@ -176,7 +176,7 @@ The file structure is
   brew install tree
   tree -L 5 -I node_modules
   ```
-
+- How to configure Google Analytics watch this video https://www.youtube.com/watch?v=Z3p6qeU76V0
 
 ## Deploy on Vercel
 
