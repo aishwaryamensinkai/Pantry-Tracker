@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+// Navbar.js
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -12,11 +14,12 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import ProfileModal from "./ProfileModal";
 import { exportToPDF } from "../utils/exportPdf";
 
-const Navbar = ({ user, items }) => {
+const Navbar = ({ user }) => {
   const router = useRouter();
   const auth = getAuth(app);
   const [showModal, setShowModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [items, setItems] = useState([]);
 
   const fetchItems = useCallback(async () => {
     try {
@@ -29,6 +32,7 @@ const Navbar = ({ user, items }) => {
         id: doc.id,
         ...doc.data(),
       }));
+      setItems(itemsData); // Update state with fetched items
     } catch (error) {
       console.error("Failed to fetch items:", error.message);
     }
@@ -88,7 +92,7 @@ const Navbar = ({ user, items }) => {
                 Generate Recipes
               </a>
               <button
-                onClick={() => exportToPDF(items)}
+                onClick={() => exportToPDF(items)} // Pass the fetched items to exportToPDF
                 className="exportButton mt-4 px-4 py-2 bg-blue-500 text-white rounded"
               >
                 Export to PDF
