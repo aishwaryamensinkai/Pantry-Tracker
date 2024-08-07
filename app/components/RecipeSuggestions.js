@@ -36,7 +36,6 @@ const RecipeSuggestions = ({ pantryItems }) => {
       }
 
       const data = await response.json();
-      console.log("Data:", data); // Debugging log
 
       const rawRecipes = data.choices[0].message.content;
 
