@@ -1,16 +1,15 @@
 "use client";
-// app/analysis/page.js
 
 import { useEffect, useState, useCallback } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { app } from "../firebase/config";
 import Navbar from "../components/Navbar";
-import InventoryAnalysis from "../components/InventoryAnalysis";
 import { firestore } from "../firebase/config";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import RecipeSuggestions from "../components/RecipeSuggestions";
 
-function AnalysisPage() {
+function GenerateRecipes() {
   const router = useRouter();
   const auth = getAuth(app);
   const [user, setUser] = useState(null);
@@ -54,14 +53,24 @@ function AnalysisPage() {
 
   return (
     <div className="dashboard">
-      <Navbar user={user} items={items} />
+      <Navbar
+        user={user}
+        setShowNotifications={() => {}}
+        setModalOpen={() => {}}
+      />
       <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
         <div style={{ marginTop: "85px", textAlign: "center" }}>
-          <InventoryAnalysis items={items} />
+          <h1 className="text-3xl font-bold mb-4">Recipe Suggestions</h1>
+          <p className="text-lg mb-8">
+            Click the button below to discover 3 delicious recipes that can be
+            made using the items present in your pantry.
+          </p>
+          <br />
+          <RecipeSuggestions pantryItems={items} />
         </div>
       </div>
     </div>
   );
 }
 
-export default AnalysisPage;
+export default GenerateRecipes;

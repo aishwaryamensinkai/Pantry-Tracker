@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ImageCapture from "./ImageCapture";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const categories = [
   "Grains",
@@ -98,7 +100,7 @@ const AddItemModal = ({
     ];
     for (const field of requiredFields) {
       if (!item[field]) {
-        alert(
+        toast.error(
           `Please fill in the ${field
             .replace(/([A-Z])/g, " $1")
             .toLowerCase()}.`
@@ -122,7 +124,7 @@ const AddItemModal = ({
         addItem(updatedItem);
       }
       handleClose();
-      alert(`Item ${editMode ? "updated" : "added"} successfully!`);
+      toast.success(`Item ${editMode ? "updated" : "added"} successfully!`);
     }
   };
 
@@ -142,140 +144,143 @@ const AddItemModal = ({
   const lastUpdatedDate = item.lastUpdated ? new Date(item.lastUpdated) : null;
 
   return (
-    <div className={`modal ${open ? "open" : ""}`}>
-      <div className="modal-content">
-        <h2>{editMode ? "Edit Item" : "Add Item"}</h2>
-        <div className="form-group">
-          <label htmlFor="name">Item Name</label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            value={item.name}
-            onChange={handleInputChange}
-            placeholder="Enter item name"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="category">Category</label>
-          <select
-            id="category"
-            name="category"
-            value={item.category}
-            onChange={handleSelectChange}
-            required
-          >
-            <option value="">Select a category</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="quantity">Quantity</label>
-          <input
-            id="quantity"
-            name="quantity"
-            type="number"
-            value={item.quantity}
-            onChange={handleInputChange}
-            min="0"
-            placeholder="Enter quantity"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="unit">Unit of Measurement</label>
-          <select
-            id="unit"
-            name="unit"
-            value={item.unit}
-            onChange={handleSelectChange}
-            required
-          >
-            <option value="">Select a unit</option>
-            {unitsOfMeasurement.map((unit) => (
-              <option key={unit} value={unit}>
-                {unit}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="expirationDate">Expiration Date</label>
-          <DatePicker
-            id="expirationDate"
-            selected={expirationDate}
-            onChange={handleDateChange}
-            dateFormat="yyyy-MM-dd"
-            placeholderText="Select expiration date"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="location">Location</label>
-          <select
-            id="location"
-            name="location"
-            value={item.location}
-            onChange={handleSelectChange}
-            required
-          >
-            <option value="">Select a location</option>
-            {locations.map((location) => (
-              <option key={location} value={location}>
-                {location}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="notes">Notes</label>
-          <textarea
-            id="notes"
-            name="notes"
-            value={item.notes}
-            onChange={handleInputChange}
-            placeholder="Enter any notes (optional)"
-          />
-        </div>
-        <div className="form-group">
-          <button
-            type="button"
-            onClick={() => setIsImageCaptureOpen(!isImageCaptureOpen)}
-          >
-            {isImageCaptureOpen ? "Close Image Capture" : "Capture Image"}
-          </button>
-          {isImageCaptureOpen && (
-            <ImageCapture onImageCaptured={handleImageCaptured} />
+    <>
+      <div className={`modal ${open ? "open" : ""}`}>
+        <div className="modal-content">
+          <h2>{editMode ? "Edit Item" : "Add Item"}</h2>
+          <div className="form-group">
+            <label htmlFor="name">Item Name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              value={item.name}
+              onChange={handleInputChange}
+              placeholder="Enter item name"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="category">Category</label>
+            <select
+              id="category"
+              name="category"
+              value={item.category}
+              onChange={handleSelectChange}
+              required
+            >
+              <option value="">Select a category</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="quantity">Quantity</label>
+            <input
+              id="quantity"
+              name="quantity"
+              type="number"
+              value={item.quantity}
+              onChange={handleInputChange}
+              min="0"
+              placeholder="Enter quantity"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="unit">Unit of Measurement</label>
+            <select
+              id="unit"
+              name="unit"
+              value={item.unit}
+              onChange={handleSelectChange}
+              required
+            >
+              <option value="">Select a unit</option>
+              {unitsOfMeasurement.map((unit) => (
+                <option key={unit} value={unit}>
+                  {unit}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="expirationDate">Expiration Date</label>
+            <DatePicker
+              id="expirationDate"
+              selected={expirationDate}
+              onChange={handleDateChange}
+              dateFormat="yyyy-MM-dd"
+              placeholderText="Select expiration date"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="location">Location</label>
+            <select
+              id="location"
+              name="location"
+              value={item.location}
+              onChange={handleSelectChange}
+              required
+            >
+              <option value="">Select a location</option>
+              {locations.map((location) => (
+                <option key={location} value={location}>
+                  {location}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="notes">Notes</label>
+            <textarea
+              id="notes"
+              name="notes"
+              value={item.notes}
+              onChange={handleInputChange}
+              placeholder="Enter any notes (optional)"
+            />
+          </div>
+          <div className="form-group">
+            <button
+              type="button"
+              onClick={() => setIsImageCaptureOpen(!isImageCaptureOpen)}
+            >
+              {isImageCaptureOpen ? "Close Image Capture" : "Capture Image"}
+            </button>
+            {isImageCaptureOpen && (
+              <ImageCapture onImageCaptured={handleImageCaptured} />
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="photo">Captured Photo</label>
+            {item.photo && <img src={item.photo} alt="Captured" />}
+          </div>
+          <div className="form-group">
+            <button
+              type="button"
+              onClick={handleSubmit}
+              style={{ background: "#4CAF4F" }}
+            >
+              {editMode ? "Update Item" : "Add Item"}
+            </button>
+            <button type="button" onClick={handleClose}>
+              Cancel
+            </button>
+          </div>
+          {lastUpdatedDate && (
+            <p className="last-updated">
+              Last Updated: {lastUpdatedDate.toLocaleString()}
+            </p>
           )}
         </div>
-        <div className="form-group">
-          <label htmlFor="photo">Captured Photo</label>
-          {item.photo && <img src={item.photo} alt="Captured" />}
-        </div>
-        <div className="form-group">
-          <button
-            type="button"
-            onClick={handleSubmit}
-            style={{ background: "#4CAF4F" }}
-          >
-            {editMode ? "Update Item" : "Add Item"}
-          </button>
-          <button type="button" onClick={handleClose}>
-            Cancel
-          </button>
-        </div>
-        {lastUpdatedDate && (
-          <p className="last-updated">
-            Last Updated: {lastUpdatedDate.toLocaleString()}
-          </p>
-        )}
       </div>
-    </div>
+      <ToastContainer />
+    </>
   );
 };
 

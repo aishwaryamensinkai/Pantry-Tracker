@@ -74,7 +74,9 @@ const RecipeSuggestions = ({ pantryItems }) => {
       >
         Generate Recipes
       </button>
-
+      <br />
+      <br />
+      <br />
       {recipes.length > 0 && (
         <div className="recipe-cards">
           {recipes.map((recipe, index) => (
