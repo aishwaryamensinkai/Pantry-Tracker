@@ -29,7 +29,6 @@ const Navbar = ({ user, items }) => {
         id: doc.id,
         ...doc.data(),
       }));
-      // Update items state if necessary
     } catch (error) {
       console.error("Failed to fetch items:", error.message);
     }

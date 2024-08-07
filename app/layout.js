@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Head from "next/head";
+import { analytics } from "./firebase/config";
 
 const inter = Inter({ subsets: ["latin"] });
 
