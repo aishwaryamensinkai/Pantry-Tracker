@@ -20,7 +20,6 @@ const ProfileModal = ({ user, onClose }) => {
           />
           <h1 className="profile-name">{user.displayName || "User"}</h1>
           <p className="profile-email">{user.email}</p>
-          <p className="profile-uid">User ID: {user.uid}</p>
         </div>
       </div>
     </div>
