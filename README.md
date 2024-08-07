@@ -16,6 +16,61 @@ This project is an Pantry Tracker specifically designed for food items, develope
 - **Notifications and Alerts**: Receive timely reminders when items are running low or nearing expiration, ensuring you never run out of essentials.
 - **Data Analysis**: Visualize your pantry usage trends with comprehensive charts and graphs, helping you make informed decisions about restocking and consumption patterns.
 
+## Components, Pages, Utilities and Firebase
+### Components
+
+- **AddItemModal**:
+  - Modal window for adding new items to the pantry.
+  - Includes fields for item details and quantity.
+
+- **ImageCapture**:
+  - Captures and uploads images for pantry items or recipes.
+  - Supports camera and file upload.
+
+- **InventoryAnalysis**:
+  - Displays visual analysis and statistics of pantry inventory.
+  - Shows item counts, expiration dates, and usage trends.
+
+- **InventoryList**:
+  - Lists all pantry items with details like name, quantity, and expiration date.
+  - Features for editing or removing items.
+
+- **Navbar**:
+  - Navigation bar for accessing different sections of the application.
+  - Links to Dashboard, Inventory, Recipe Suggestions, etc.
+
+- **Pantry**:
+  - Main component showing the current state of the pantry.
+  - Integrates and displays item details.
+
+- **ProfileModal**:
+  - Modal for viewing and editing user profile information.
+  - Includes options to update personal details and preferences.
+
+- **RecipeSuggestions**:
+  - Provides recipe ideas based on available pantry items.
+  - Lists recipes with ingredients and instructions.
+
+### Pages
+
+- **analysis/page.js**:
+  - Displays inventory analysis and insights.
+
+- **dashboard/page.js**:
+  - Overview of the pantry and key metrics.
+
+- **generate-recipes/page.js**:
+  - Generates and shows recipe suggestions based on pantry contents.
+
+### Utilities
+
+- **exportPdf.js**:
+  - Exports inventory data or analysis reports as PDF files.
+
+### Firebase
+
+- **config.js**:
+  - Initializes and connects to Firebase services.
 
 ## Technologies Used
 
